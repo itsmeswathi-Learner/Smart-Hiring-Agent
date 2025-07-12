@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Hiring Agent</title>
+  <meta name="description"
+    content="AI-powered platform for hiring: resume parsing, coding, interviews, MCQs & reporting.">
+  <link rel="icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+
+  <script
+    src='https://cdn.jotfor.ms/agent/embedjs/019798011cea741098d7b3a3cbad590ae29f/embed.js?skipWelcome=1&maximizable=1&isVoice=1'>
+    </script>
+
+
+
+
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f9fbff;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: flex-end;
+      background-color: #4d7bc0;
+      padding: 10px 20px;
+      color: white;
+      gap: 20px;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar img.navimg {
+      height: 40px;
+      cursor: pointer;
+      margin-right: auto;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      text-transform: capitalize;
+      transition: color 0.3s ease;
+    }
+
+    .navbar a:hover {
+      color: #cce5ff;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 40px;
+      background: linear-gradient(135deg, #007bff 0%, #00c6ff 100%);
+      color: white;
+      flex-wrap: wrap;
+      text-align: center;
+      border-radius: 0 0 40px 40px;
+      margin-bottom: 60px;
+      box-shadow: 0 6px 15px rgba(13, 71, 161, 0.1);
+    }
+
+    .hero-content {
+      max-width: 600px;
+      margin-bottom: 30px;
+    }
+
+    .hero h1 {
+      font-size: 3.8rem;
+      font-weight: 900;
+      margin-bottom: 15px;
+      color: white;
+    }
+
+    #typing-text {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+      min-height: 60px;
+    }
+
+    .hero-image {
+      max-width: 480px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary {
+      background-color: white;
+      color: #007bff;
+      padding: 12px 25px;
+      font-weight: 600;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary:hover {
+      background-color: #cce5ff;
+      color: #004085;
+    }
+
+    .section-title {
+      font-size: 36px;
+      font-weight: 700;
+      color: #007bff;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .process-steps {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      padding-bottom: 60px;
+    }
+
+    .step {
+      background: #f1f7ff;
+      flex: 1 1 250px;
+      max-width: 300px;
+      border-radius: 20px;
+      padding: 30px 25px;
+      box-shadow: 0 6px 15px rgba(13, 71, 161, 0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+    }
+
+    .step:hover {
+      box-shadow: 0 12px 24px rgba(13, 71, 161, 0.3);
+      transform: translateY(-6px);
+    }
+
+    .step .icon {
+      font-size: 4rem;
+      color: #0d47a1;
+      margin-bottom: 20px;
+    }
+
+    .step h3 {
+      font-weight: 700;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      color: #0d47a1;
+    }
+
+    .step p {
+      color: #555;
+    }
+
+    section.cta-section {
+      text-align: center;
+      padding: 60px 20px;
+      background-color: white;
+      margin-bottom: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    section.cta-section h2 {
+      font-size: 32px;
+      color: #007bff;
+      margin-bottom: 25px;
+    }
+
+    .footer {
+      background-color: #2b69a7;
+      color: #f1f1f1;
+      padding: 40px 0 20px;
+    }
+
+    .footer-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      max-width: 1200px;
+      margin: auto;
+      padding: 0 20px;
+    }
+
+    .footer-column {
+      flex: 1 1 250px;
+      margin-bottom: 30px;
+    }
+
+    .footer-column h3,
+    .footer-column h4 {
+      color: #ffffff;
+      margin-bottom: 15px;
+    }
+
+    .footer-column p,
+    .footer-column ul,
+    .footer-column a {
+      color: #c4c4c4;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column ul li {
+      margin-bottom: 8px;
+    }
+
+    .footer-column a:hover {
+      color: #fff;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 13px;
+      color: #c4c4c4;
+    }
+
+    @media (min-width: 768px) {
+      .hero {
+        text-align: left;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .hero-content {
+        margin-bottom: 0;
+        margin-right: 50px;
+      }
+
+      .process-steps {
+        justify-content: space-between;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+
+      #typing-text {
+        font-size: 1rem;
+      }
+
+      .hero-image {
+        width: 80%;
+      }
+
+      .section-title {
+        font-size: 28px;
+      }
+
+      .step {
+        max-width: 90%;
+      }
+
+      .footer-column {
+        flex: 1 1 100%;
+        text-align: center;
+      }
+
+      .footer-column ul {
+        padding-left: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar">
+    <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Agent Logo" class="navimg" />
+    <a href="/">Home</a>
+    <a href="/login">Login</a>
+    <a href="/signup">Signup</a>
+    <a href="/coding">Coding</a>
+    <a href="/mcq">VerLog</a>
+  </nav>
+
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1>Smart Hiring Agent</h1>
+      <p id="typing-text">Your Smart Assistant for Hiring</p>
+      <a href="/signup" class="btn-primary">Get Started</a>
+    </div>
+    <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Hiring Process Illustration"
+      class="hero-image" />
+  </section>
+
+  <main class="container">
+    <h2 class="section-title">How It Works</h2>
+    <div class="process-steps">
+      <div class="step">
+        <div class="icon">📄</div>
+        <h3>Resume Upload</h3>
+        <p>Score resumes with ATS instantly.</p>
+      </div>
+      <div class="step">
+        <div class="icon">🎤</div>
+        <h3>Interview</h3>
+        <p>Assess communication skills effectively.</p>
+      </div>
+      <div class="step">
+        <div class="icon">🧠</div>
+        <h3>Aptitude</h3>
+        <p>Evaluate logical reasoning easily.</p>
+      </div>
+      <div class="step">
+        <div class="icon">💻</div>
+        <h3>Coding Round</h3>
+        <p>Challenge coding ability with real problems.</p>
+      </div>
+      <div class="step">
+        <div class="icon">📊</div>
+        <h3>Final Report</h3>
+        <p>Get AI-powered hiring suggestions.</p>
+      </div>
+    </div>
+
+    <section class="cta-section" id="login">
+      <h2>Already a Member?</h2>
+      <a href="/login" class="btn-primary">Login Now</a>
+    </section>
+
+    <section class="cta-section" id="signup">
+      <h2>New to Smart Hiring Agent?</h2>
+      <a href="/signup" class="btn-primary">Sign Up Today</a>
+    </section>
+
+    <section class="cta-section">
+      <h2>Why Choose Us?</h2>
+      <p>Smarter, faster, and unbiased hiring experience. Designed for modern recruiters and applicants.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3>Smart Hiring Agent</h3>
+        <p>Empowering smarter hiring decisions with AI-driven assessments and automation.</p>
+      </div>
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#login">Login</a></li>
+          <li><a href="#signup">Sign Up</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Contact</h4>
+        <p>📞 +91 98989 89898</p>
+        <p>📧 <a href="mailto:innomax@gmail.com">innomax@gmail.com</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Smart Hiring Agent. All rights reserved. <a href="/signup"
+          style="color:#fff; font-weight:bold;">Join Now →</a></p>
+    </div>
+  </footer>
+
+  <script>
+    const phrases = [
+      "Score Resumes Instantly.",
+      "AI-Powered Interview Rounds.",
+      "Coding + Aptitude in One Place.",
+      "Get Your Final Hiring Report."
+    ];
+    let i = 0, j = 0;
+    const textEl = document.getElementById("typing-text");
+
+    function type() {
+      if (i < phrases.length) {
+        if (j < phrases[i].length) {
+          textEl.textContent += phrases[i].charAt(j++);
+          setTimeout(type, 80);
+        } else {
+          setTimeout(() => {
+            textEl.textContent = '';
+            j = 0;
+            i = (i + 1) % phrases.length;
+            type();
+          }, 1500);
+        }
+      }
+    }
+    type();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Resume - Smart Hiring Agent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Body and Font styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(120deg, #89f7fe, #66a6ff);
+            /* Light blue background for consistency */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Use min-height for content that might extend */
+            margin: 0;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Container for the upload box */
+        .upload-box {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            /* More prominent shadow */
+            width: 100%;
+            max-width: 550px;
+            /* Increased max-width for better form layout */
+            text-align: center;
+            box-sizing: border-box;
+            transition: transform 0.3s ease;
+            /* Smooth transition on hover/focus */
+        }
+
+        .upload-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .upload-box h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #007bff;
+            /* Consistent blue heading */
+            font-weight: 700;
+        }
+
+        /* Form elements styling */
+        .upload-box label {
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+            font-weight: 600;
+            color: #555;
+            font-size: 15px;
+        }
+
+        .upload-box input[type="file"] {
+            display: block;
+            /* Ensure it takes its own line */
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #cce5ff;
+            /* Lighter border */
+            border-radius: 8px;
+            background-color: #f8fcff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Custom file input styling if desired (more complex) */
+        /* You might want to hide default input and style a button/text instead */
+        /* .upload-box input[type="file"]::-webkit-file-upload-button {
+            visibility: hidden;
+        }
+        .upload-box input[type="file"]::before {
+            content: 'Select Resume';
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 8px 15px;
+            outline: none;
+            white-space: nowrap;
+            -webkit-user-select: none;
+            cursor: pointer;
+            text-shadow: 1px 1px #333;
+            font-weight: 700;
+            font-size: 10pt;
+        } */
+
+
+        .upload-box textarea {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            padding: 15px;
+            width: 100%;
+            min-height: 120px;
+            margin-bottom: 25px;
+            border: 1px solid #cce5ff;
+            border-radius: 8px;
+            background-color: #f8fcff;
+            resize: vertical;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+
+        }
+
+        /* Button Styling - Consistent with landing page */
+        .btn {
+            font-size: 17px;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Flash Messages */
+        .flash-message {
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 15px;
+            text-align: left;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+
+        .ats-score-container {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: left;
+        }
+
+        .ats-score {
+            background-color: #f1f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border: 1px solid #cce5ff;
+        }
+
+        .ats-score h3 {
+            margin: 0 0 10px;
+            color: #28a745;
+            /* Green for score */
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .ats-score p {
+            margin: 0;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .keywords {
+            background-color: #e6f7ff;
+            /* Even lighter blue */
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #b3e0ff;
+        }
+
+        .keywords h4 {
+            margin: 0 0 10px;
+            color: #007bff;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .keywords p {
+            margin: 0;
+            color: #333;
+            font-size: 15px;
+            word-wrap: break-word;
+            /* Ensure long keyword lists wrap */
+        }
+
+        /* Next Button specific styling */
+        .next-btn-wrapper {
+            margin-top: 30px;
+        }
+
+        .next-btn-wrapper .btn {
+            background-color: #28a745;
+            /* Green for next button */
+            color: white;
+        }
+
+        .next-btn-wrapper .btn:hover {
+            background-color: #218838;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .upload-box {
+                padding: 25px;
+                margin: 20px;
+            }
+
+            .upload-box h2 {
+                font-size: 24px;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                font-size: 15px;
+            }
+
+            .ats-score h3 {
+                font-size: 20px;
+            }
+
+            .ats-score p,
+            .keywords p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body class="upload-resume-bg">
+    <div class="upload-box">
+        <h2>Upload Your Resume</h2>
+        <form action="{{ url_for('upload_resume') }}" method="POST" enctype="multipart/form-data">
+            <label for="resume">Upload Resume (.pdf, .doc, .docx):</label>
+            <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+
+            <label for="job_description">Job Description:</label>
+            <textarea id="job_description" name="job_description" rows="6"
+                placeholder="Enter the job description here..." required></textarea>
+
+            <button type="submit" class="btn btn-primary">Upload Resume</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="flash-message {{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endwith %}
+
+        {% if ats_score is not none or matched_keywords %}
+        <div class="ats-score-container">
+            {% if ats_score is not none %}
+            <div class="ats-score">
+                <h3>ATS Score: {{ ats_score }}%</h3>
+                <p>Resume: {{ filename }}</p>
+            </div>
+            {% endif %}
+
+            {% if matched_keywords %}
+            <div class="keywords">
+                <h4>Matched Keywords:</h4>
+                <p>{{ matched_keywords | join(', ') }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="next-btn-wrapper">
+            <a href="/interview"><button class="btn">Proceed to Interview</button></a>
+        </div>
+
+        {% elif request.method == 'POST' and not ats_score %}
+        <div class="flash-message error">
+            <p>There was an issue processing your resume or no score could be generated. Please check your file and job
+                description, then try again.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const fileInput = document.querySelector('input[type="file"]');
+            const file = fileInput.files[0];
+            const jobDescription = document.getElementById('job_description').value.trim();
+
+            if (!file) {
+                e.preventDefault();
+                alert('Please select a resume file to upload.');
+                return;
+            }
+
+            if (!jobDescription) {
+                e.preventDefault();
+                alert('Please enter the job description.');
+                return;
+            }
+
+            const allowedTypes = ['application/pdf',
+                'application/msword', // .doc
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document']; // .docx
+            if (!allowedTypes.includes(file.type)) {
+                e.preventDefault();
+                alert('Invalid file type. Please upload a valid resume (.pdf, .doc, .docx).');
+            }
+        });
+    </script>
+</body>
+
+</html>

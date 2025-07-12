@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Aptitude + Verbal + Logical Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+
+      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      padding: 30px;
+    }
+
+    .title {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 12px;
+      color: #2d3a4b;
+    }
+
+    .points ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .points li {
+      margin-bottom: 8px;
+    }
+
+    .start-btn,
+    .next-btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 12px 32px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: block;
+      margin: 24px auto 0;
+      transition: background 0.2s;
+    }
+
+    .start-btn:hover,
+    .next-btn:hover {
+      background: #2563eb;
+    }
+
+    .question-section {
+      margin-top: 16px;
+      display: none;
+    }
+
+    .question {
+      font-size: 1.15rem;
+      margin-bottom: 18px;
+      color: #2d3a4b;
+    }
+
+    .options {
+      list-style: none;
+      padding: 0;
+    }
+
+    .options li {
+      margin-bottom: 12px;
+    }
+
+    .option-label {
+      display: block;
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .option-input:checked+.option-label {
+      background: #dbeafe;
+      border: 2px solid #3b82f6;
+    }
+
+    .timer-container {
+      position: absolute;
+      left: 24px;
+      top: 24px;
+    }
+
+    .timer-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: conic-gradient(#3b82f6 var(--percent, 0%), #e5e7eb 0%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #2d3a4b;
+    }
+
+    .round-label {
+      font-size: 1rem;
+      color: #64748b;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .thankyou {
+      text-align: center;
+      font-size: 1.5rem;
+      color: #16a34a;
+      margin-top: 40px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="timer-container" style="display:none;">
+    <div class="timer-circle" id="timerCircle">60</div>
+    <div class="round-label" id="roundLabel"></div>
+  </div>
+
+  <div class="container" id="mainContainer">
+    <div class="title">Smart Hiring Test</div>
+    <div class="points" id="pointsSection">
+      <ul>
+        <li>Total: <b>30 questions</b> (Aptitude: 10, Verbal: 10, Logical: 10)</li>
+        <li>Each question carries <b>1 mark</b></li>
+        <li>Each question has <b>1 minute</b> to answer</li>
+        <li>No keyboard shortcuts or window resizing allowed</li>
+        <li>AI-based scoring and proctoring enabled</li>
+      </ul>
+      <button class="start-btn" id="startBtn">Start Test</button>
+    </div>
+    <div class="question-section" id="questionSection"></div>
+    <div class="thankyou" id="thankYouMsg">Thank you for completing the test!
+      <a href="/coding" target="_blank"><button>Move to Coding round</button></a>
+
+    </div>
+  </div>
+
+  <script>
+    // Proctoring warnings
+    let proctoringWarningCount = 0;
+
+    function proctoringAlert(msg) {
+      proctoringWarningCount++;
+      alert(msg);
+      if (proctoringWarningCount >= 2) {
+        document.body.innerHTML = '<div class="thankyou">Test closed due to repeated violations.<br>Thank you.</div>';
+        window.onbeforeunload = null;
+      }
+    }
+
+    // Block keyboard shortcuts
+    document.addEventListener('keydown', e => {
+      if (
+        e.ctrlKey || e.metaKey || e.altKey ||
+        [123, 44, 91, 92].includes(e.keyCode)
+      ) {
+        proctoringAlert("Keyboard shortcut not allowed!");
+        e.preventDefault();
+      }
+      if (e.keyCode === 116) {
+        proctoringAlert("Page refresh not allowed!");
+        e.preventDefault();
+      }
+    });
+
+    // Block right-click
+    document.addEventListener('contextmenu', e => {
+      proctoringAlert("Right-click not allowed!");
+      e.preventDefault();
+    });
+
+    // Block copy/paste/cut
+    ['copy', 'paste', 'cut'].forEach(evt =>
+      document.addEventListener(evt, e => {
+        proctoringAlert("Copy/Paste/Cut not allowed!");
+        e.preventDefault();
+      })
+    );
+
+    // Block window resize
+    let [w, h] = [window.innerWidth, window.innerHeight];
+    window.addEventListener('resize', () => {
+      if (window.innerWidth !== w || window.innerHeight !== h) {
+        proctoringAlert("Window resize not allowed!");
+      }
+    });
+
+    // Block tab switch
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) proctoringAlert("Tab/window switch detected!");
+    });
+    window.onbeforeunload = () => "Are you sure? Your test will be lost.";
+
+    // Question Data
+    const aptitudeQuestions = [
+      {
+        question: "What is the value of x if log₂(x+1) + log₂(x−1) = 3?",
+        options: ["3", "√7", "4", "5"],
+        correct: "√7"
+      },
+      {
+        question: "The average of 10 numbers is zero. Of them, how many may be greater than zero?",
+        options: ["At least 1", "At least 9", "All", "None"],
+        correct: "At least 9"
+      },
+      {
+        question: "A train running at the speed of 60 km/hr crosses a pole in 9 seconds. What is the length of the train?",
+        options: ["120 m", "150 m", "180 m", "200 m"],
+        correct: "150 m"
+      },
+      {
+        question: "If A gets 20% more than B, then by what percent B gets less than A?",
+        options: ["16.67%", "17.33%", "18.33%", "19.67%"],
+        correct: "16.67%"
+      },
+      {
+        question: "A man rows his boat upstream and downstream. The total distance covered is 12 km, time taken is 3 hours. If ratio of speed of boat to stream is 3:1, what is speed of stream?",
+        options: ["2 km/h", "3 km/h", "4 km/h", "6 km/h"],
+        correct: "2 km/h"
+      },
+      {
+        question: "What is the compound interest on Rs. 10000 at 10% p.a. for 2 years?",
+        options: ["Rs. 2000", "Rs. 2100", "Rs. 2200", "Rs. 2300"],
+        correct: "Rs. 2100"
+      },
+      {
+        question: "A and B together can do a work in 6 days. A alone can do it in 10 days. In how many days can B alone do it?",
+        options: ["12 days", "15 days", "18 days", "20 days"],
+        correct: "15 days"
+      },
+      {
+        question: "In how many ways can letters of the word 'MATHS' be arranged?",
+        options: ["120", "60", "24", "20"],
+        correct: "120"
+      },
+      {
+        question: "A bag contains 4 red balls and 6 blue balls. Two balls are drawn. What is the probability that both are red?",
+        options: ["2/15", "6/45", "1/15", "4/10"],
+        correct: "2/15"
+      },
+      {
+        question: "What is the HCF of 1024 and 768?",
+        options: ["256", "128", "64", "512"],
+        correct: "256"
+      }
+    ];
+
+    const logicalReasoningQuestions = [
+      {
+        question: "In a certain code language, LEMON = MDNPO. What is CLEMENT?",
+        options: ["DKNDOSU", "DMNFOSU", "DNMFOUU", "DLMFTOU"],
+        correct: "DMNFOSU"
+      },
+      {
+        question: "If A is B's brother and C is A's father, then what is C to B?",
+        options: ["Brother", "Uncle", "Father", "Son"],
+        correct: "Father"
+      },
+      {
+        question: "Find the next number: 2, 6, 12, 20, ___",
+        options: ["30", "32", "35", "40"],
+        correct: "30"
+      },
+      {
+        question: "Five friends A, B, C, D, E sit around a round table. A is between D and E. Who is to the right of A?",
+        options: ["B", "C", "D", "E"],
+        correct: "E"
+      },
+      {
+        question: "Which conclusion follows? All cats are mammals. Some mammals are black.",
+        options: ["Some cats are black", "No cat is black", "All black animals are mammals", "None of these"],
+        correct: "None of these"
+      },
+      {
+        question: "Find the odd one out: Apple, Mango, Papaya, Tomato",
+        options: ["Apple", "Mango", "Papaya", "Tomato"],
+        correct: "Tomato"
+      },
+      {
+        question: "If 1st Jan 2020 is Friday, what day is 1st Feb 2025?",
+        options: ["Monday", "Sunday", "Saturday", "Friday"],
+        correct: "Monday"
+      },
+      {
+        question: "Choose the next letter: A, D, G, J, ___",
+        options: ["L", "M", "N", "O"],
+        correct: "M"
+      },
+      {
+        question: "Pointing to a photograph, Ravi said, “She is the daughter of the only child of my father's father-in-law.” How is the girl in the photograph related to Ravi?",
+        options: ["Cousin", "Sister", "Niece", "Daughter"],
+        correct: "Sister"
+      },
+      {
+        question: "If P $ Q means P is the father of Q, and P @ Q means P is the sister of Q, which shows M is N's uncle?",
+        options: ["M $ K @ N", "M @ K $ N", "M $ K @ N", "M @ K @ N"],
+        correct: "M $ K @ N"
+      }
+    ];
+
+    const verbalReasoningQuestions = [
+      {
+        question: "Choose synonym of 'meticulous'",
+        options: ["Careless", "Careful", "Bold", "Lazy"],
+        correct: "Careful"
+      },
+      {
+        question: "Choose antonym of 'abundant'",
+        options: ["Scarce", "Plentiful", "Enough", "More"],
+        correct: "Scarce"
+      },
+      {
+        question: "Choose the correct sentence:",
+        options: ["Their going to school.", "They're going to school.", "There going to school.", "Ther're going to school."],
+        correct: "They're going to school."
+      },
+      {
+        question: "Correct the sentence: 'She don't like apples.'",
+        options: ["She doesn't like apples.", "She does not likes apples.", "She not likes apples.", "She didn't like apples."],
+        correct: "She doesn't like apples."
+      },
+      {
+        question: "Identify error: 'I am better in English than Mathematics.'",
+        options: ["better in", "English", "than", "Mathematics"],
+        correct: "better in"
+      },
+      {
+        question: "Which word is an adverb?",
+        options: ["Quick", "Quickly", "Quicker", "Quickest"],
+        correct: "Quickly"
+      },
+      {
+        question: "Meaning of 'idiom': 'To have a soft spot'",
+        options: ["To be weak", "To be gentle", "To love someone/something", "To avoid"],
+        correct: "To love someone/something"
+      },
+      {
+        question: "Fill in the blank: He _______ in the garden since morning.",
+        options: ["is playing", "was playing", "has been playing", "had played"],
+        correct: "has been playing"
+      },
+      {
+        question: "Choose the correct preposition: She walked ________ the bridge.",
+        options: ["on", "over", "above", "across"],
+        correct: "across"
+      },
+      {
+        question: "Select the correct form: 'He ________ to school every day.'",
+        options: ["go", "goes", "going", "went"],
+        correct: "goes"
+      }
+    ];
+
+    const allQuestions = [
+      aptitudeQuestions,
+      logicalReasoningQuestions,
+      verbalReasoningQuestions
+    ];
+
+    const rounds = [
+      { name: "Aptitude", count: 10 },
+      { name: "Logical Reasoning", count: 10 },
+      { name: "Verbal Reasoning", count: 10 }
+    ];
+
+    let userAnswers = [];
+    let currentRound = 0;
+    let currentQuestion = 0;
+    let timer = null;
+    let timeLeft = 60;
+
+    const startBtn = document.getElementById('startBtn');
+    const pointsSection = document.getElementById('pointsSection');
+    const questionSection = document.getElementById('questionSection');
+    const timerContainer = document.querySelector('.timer-container');
+    const timerCircle = document.getElementById('timerCircle');
+    const roundLabel = document.getElementById('roundLabel');
+    const thankYouMsg = document.getElementById('thankYouMsg');
+
+    startBtn.onclick = () => {
+      pointsSection.style.display = 'none';
+      timerContainer.style.display = 'block';
+      currentRound = 0;
+      currentQuestion = 0;
+      userAnswers = [];
+      showQuestion();
+    };
+
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function showQuestion() {
+      if (currentRound >= rounds.length) return finishTest();
+
+      const round = rounds[currentRound];
+      const questions = allQuestions[currentRound];
+
+      if (currentQuestion >= questions.length) {
+        currentRound++;
+        currentQuestion = 0;
+        return showQuestion();
+      }
+
+      const q = questions[currentQuestion];
+      roundLabel.textContent = `${round.name} (${currentQuestion + 1}/${questions.length})`;
+
+      const shuffledOptions = shuffle([...q.options]);
+
+      questionSection.innerHTML = `
+      <div class="question">${q.question}</div>
+      <ul class="options">
+        ${shuffledOptions.map((opt, i) => `
+          <li>
+            <input type="radio" name="opt" id="opt${i}" class="option-input" value="${opt}">
+            <label for="opt${i}" class="option-label">${opt}</label>
+          </li>
+        `).join("")}
+      </ul>
+      <button class="next-btn" id="nextBtn">${currentRound === rounds.length - 1 && currentQuestion === questions.length - 1 ? "Submit" : "Next"
+        }</button>
+    `;
+      questionSection.style.display = 'block';
+
+      document.getElementById('nextBtn').onclick = nextQuestion;
+      resetTimer();
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timeLeft = 60;
+      updateTimer();
+      timer = setInterval(() => {
+        timeLeft--;
+        updateTimer();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          nextQuestion(true);
+        }
+      }, 1000);
+    }
+
+    function updateTimer() {
+      timerCircle.textContent = timeLeft;
+      timerCircle.style.setProperty('--percent', `${(timeLeft / 60) * 100}%`);
+    }
+
+    function nextQuestion(auto = false) {
+      clearInterval(timer);
+
+      const selected = document.querySelector('input[name="opt"]:checked');
+      const ans = selected ? selected.value : null;
+      const q = allQuestions[currentRound][currentQuestion];
+
+      userAnswers.push({
+        round: rounds[currentRound].name,
+        question: q.question,
+        selected: ans,
+        correct: q.correct,
+        isCorrect: ans === q.correct
+      });
+
+      currentQuestion++;
+      showQuestion();
+    }
+
+    async function finishTest() {
+      clearInterval(timer);
+      timerContainer.style.display = 'none';
+      questionSection.style.display = 'none';
+      thankYouMsg.style.display = 'block';
+
+      let score = userAnswers.filter(a => a.isCorrect).length;
+      let aiScore = userAnswers.reduce((acc, a) => acc + (a.isCorrect ? 1 : -0.1), 0);
+
+
+      await fetch('/submit_mcq_answers', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ answers: userAnswers, score, ai_score: aiScore })
+      });
+
+
+
+    }
+  </script>
+
+</body>
+
+</html>

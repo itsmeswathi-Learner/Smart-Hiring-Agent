@@ -1,0 +1,363 @@
+<!-- Save as templates/interview.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Hiring Agent - Dynamic Interview</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+
+      background: linear-gradient(120deg, #89f7fe, #66a6ff);
+      color: #333;
+      padding: 30px 5%;
+      padding-left: 400px;
+    }
+
+    h2,
+    h3 {
+      color: #0d3c61;
+    }
+
+    .note-box {
+      background-color: #d1ecf1;
+      color: #0c5460;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-left: 4px solid #17a2b8;
+      border-radius: 4px;
+    }
+
+    .question-box {
+      background: #ffffff;
+      border-left: 5px solid #007bff;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      font-size: 15px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+      resize: vertical;
+      background: #f9f9f9;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      background-color: #007bff;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 10px;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      background-color: #0056b3;
+    }
+
+    .btn.listening {
+      background-color: #dc3545;
+    }
+
+    .btn:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
+
+    video#webcam {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      width: 360px;
+      height: 270px;
+      border: 2px solid #007bff;
+      border-radius: 8px;
+      z-index: 1000;
+      background-color: #000;
+    }
+
+    #questions {
+      display: none;
+      max-width: 800px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Welcome to INNOMAXSOL IT - Interview round</h2>
+  <div class="note-box">
+    🔇 Please sit in a quiet place with a plain background.<br />
+    📱 Ensure your camera and microphone are working.<br />
+    ⏳ You have <span id="timeLimit">3</span> minutes to complete the interview.<br />
+    📸 Click the button to turn on the camera and begin your interview.<br />
+    🎤 Speak your answers clearly and click submit once done.<br />
+    <p>⏳ Time Left: <span id="countdown">3:00</span></p><br />
+    🔐 Proctoring is active. Do not switch tabs or open developer tools.
+  </div>
+
+  <button class="btn" id="startBtn" onclick="startInterview()">Start Interview</button>
+  <video id="webcam" autoplay muted></video>
+
+  <form action="/submit_answers" method="POST" onsubmit="prepareSubmission(event)">
+    <div id="questions"></div>
+    <input type="hidden" name="answers" id="hiddenAnswers" />
+    <button type="submit" class="btn" id="submitBtn" style="display:none;">✅ Submit All Answers</button>
+  </form>
+
+
+
+
+  <script>
+
+    let mediaRecorder, audioChunks = [];
+    let audioBlob;
+
+    // Trigger after interview ends (in startCountdown → on timeout)
+
+    function startRecording() {
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+        mediaRecorder.onstop = async () => {
+          audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+          document.getElementById("recordStatus").innerText = "Recording completed 🎉";
+
+          // Upload audio to backend for scoring
+          const formData = new FormData();
+          formData.append('audio', audioBlob, 'pronunciation.wav');
+
+          const res = await fetch('/upload_pronunciation_audio', { method: 'POST', body: formData });
+          const result = await res.json();
+          alert("Pronunciation Score: " + result.pronunciation_score + " / 40");
+        };
+
+        mediaRecorder.start();
+        document.getElementById("recordStatus").innerText = "Recording...";
+        document.getElementById("recordBtn").disabled = true;
+        document.getElementById("stopBtn").disabled = false;
+      });
+    }
+
+    function stopRecording() {
+      if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+        document.getElementById("stopBtn").disabled = true;
+      }
+    }
+
+
+
+
+    const questions = {{ questions | tojson }};
+    const timeLimitMinutes = 3;
+
+    document.getElementById('timeLimit').textContent = timeLimitMinutes;
+
+    const recognitions = {};
+    const questionsContainer = document.getElementById('questions');
+    const submitBtn = document.getElementById('submitBtn');
+    const startBtn = document.getElementById('startBtn');
+
+    function renderQuestions() {
+      questionsContainer.innerHTML = '';
+      questions.forEach((question, index) => {
+        const qIndex = index + 1;
+        const questionHTML = `
+          <div class="question-box">
+            <p><strong>Q${qIndex}:</strong> ${question}</p>
+            <textarea id="answer${qIndex}" name="answer${qIndex}" placeholder="Your spoken answer will appear here..." rows="5"></textarea>
+            <button type="button" class="btn" id="btnSpeak${qIndex}" onclick="toggleListening(${qIndex})">🎙️ Speak</button>
+          </div>
+        `;
+        questionsContainer.insertAdjacentHTML('beforeend', questionHTML);
+      });
+    }
+
+    function startCountdown(durationInMinutes) {
+      let remaining = durationInMinutes * 60;
+      const timerDisplay = document.getElementById("countdown");
+
+      const interval = setInterval(() => {
+        const minutes = Math.floor(remaining / 60);
+        const seconds = remaining % 60;
+        timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+        if (--remaining < 0) {
+          clearInterval(interval);
+          console.log("Time's up. Showing pronunciation...");
+          alert("⏳ Time's up! Submitting your answers. Next is Pronunciation round!");
+
+          // Show pronunciation section
+          showPronunciationRound();
+
+          // Delay submission so browser can render new section
+          setTimeout(() => {
+            console.log("Submitting form...");
+            document.querySelector("form").submit();
+          }, 100); // Small delay (100ms) to let UI update
+        }
+      }, 1000);
+    }
+
+    function toggleListening(index) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('Speech Recognition API not supported in this browser.');
+        return;
+      }
+
+      const btn = document.getElementById(`btnSpeak${index}`);
+      const textarea = document.getElementById(`answer${index}`);
+
+      if (recognitions[index]) {
+        recognitions[index].stop();
+        return;
+      }
+
+      disableAllSpeakButtons(true, index);
+      const recognition = new SpeechRecognition();
+      recognitions[index] = recognition;
+
+      recognition.lang = 'en-US';
+      recognition.interimResults = true;
+      recognition.continuous = true;
+
+      btn.textContent = '🛑 Stop';
+      btn.classList.add('listening');
+
+      recognition.onresult = (event) => {
+        let finalTranscript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const result = event.results[i];
+          if (result.isFinal) {
+            finalTranscript += result[0].transcript + ' ';
+          }
+        }
+        if (finalTranscript) {
+          textarea.value += finalTranscript;
+          textarea.scrollTop = textarea.scrollHeight;
+        }
+      };
+
+      recognition.onerror = (event) => {
+        alert('Speech recognition error: ' + event.error);
+        recognition.stop();
+      };
+
+      recognition.onend = () => {
+        recognitions[index] = null;
+        btn.textContent = '🎙️ Speak';
+        btn.classList.remove('listening');
+        disableAllSpeakButtons(false);
+      };
+
+      recognition.start();
+    }
+
+    function disableAllSpeakButtons(disable, exceptIndex = null) {
+      questions.forEach((_, idx) => {
+        const qIndex = idx + 1;
+        if (qIndex !== exceptIndex) {
+          const btn = document.getElementById(`btnSpeak${qIndex}`);
+          if (btn) btn.disabled = disable;
+        }
+      });
+    }
+
+    async function prepareSubmission(event) {
+      event.preventDefault();
+      submitBtn.disabled = true;
+
+      await Promise.all(Object.keys(recognitions).map(index => {
+        return new Promise(resolve => {
+          const recognition = recognitions[index];
+          if (recognition) {
+            recognition.onend = () => {
+              recognitions[index] = null;
+              resolve();
+            };
+            recognition.stop();
+          } else {
+            resolve();
+          }
+        });
+      }));
+
+      const answers = questions.map((_, idx) => {
+        return document.getElementById(`answer${idx + 1}`).value.trim();
+      });
+
+      document.getElementById('hiddenAnswers').value = answers.join('\n');
+      event.target.submit();
+    }
+
+    function startInterview() {
+      startBtn.disabled = true;
+      const video = document.getElementById('webcam');
+      const questionsDiv = document.getElementById('questions');
+
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+          video.srcObject = stream;
+          video.style.display = 'block';
+          questionsDiv.style.display = 'block';
+          submitBtn.style.display = 'inline-block';
+          renderQuestions();
+          startCountdown(timeLimitMinutes);
+        })
+        .catch(error => {
+          alert("Camera or microphone access denied.");
+          console.error("Media device error:", error);
+          startBtn.disabled = false;
+        });
+    }
+
+    // Proctoring
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        alert("🚫 Tab switched! Session ended.");
+        window.location.href = "/session_terminated";
+      }
+    });
+
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if (
+        e.keyCode === 123 || // F12
+        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || // Ctrl+Shift+I/J/C
+        (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+      ) {
+        e.preventDefault();
+        alert("⚠️ Developer tools are disabled.");
+      }
+    });
+  </script>
+
+
+
+</body>
+
+</html>

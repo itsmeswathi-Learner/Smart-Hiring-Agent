@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Interview Results</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    h3 {
+      color: #007BFF;
+      margin-top: 30px;
+    }
+
+    pre {
+      background-color: #f8f8f8;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 6px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+      font-size: 14px;
+    }
+
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    ul li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fdfdfd;
+      padding: 12px 15px;
+      margin-bottom: 10px;
+      border-left: 5px solid #007BFF;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      font-size: 16px;
+    }
+
+    ul li .label {
+      color: #2c3e50;
+      font-weight: 500;
+    }
+
+    ul li .value {
+      color: #2d3436;
+      font-weight: bold;
+    }
+
+    .overall-score {
+      background-color: #dff9fb;
+      padding: 15px;
+      border: 2px dashed #0984e3;
+      margin-top: 20px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      color: #0984e3;
+    }
+
+    .download-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .download-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Interview Results Summary</h2>
+
+    {% if error %}
+    <p style="color: red; text-align: center;">{{ error }}</p>
+    {% else %}
+    <ul>
+
+      <li><span class="label">Answer Type:</span> <span class="value">{{ answer_type }}</span></li>
+      <li><span class="label">Grammar Score:</span> <span class="value">{{ grammar_score }} / 100</span></li>
+      <li><span class="label">Communication Score:</span> <span class="value">{{ communication_score }} / 100</span>
+      </li>
+      <li><span class="label">Voice Tone Score:</span> <span class="value">{{ voice_tone_score }} / 100</span></li>
+      <li><span class="label">Confidence Score:</span> <span class="value">{{ confidence_score }} / 100</span></li>
+    </ul>
+
+    <div class="overall-score">
+      🏆 Overall Score: {{ overall_score }} / 100
+    </div>
+
+    <h3>Your Answers</h3>
+    <pre>{{ answers }}</pre>
+
+    <p><small>Submitted on: {{ created_at }}</small></p>
+
+
+    {% endif %}
+  </div>
+  {% if overall_score >= 46 %}
+  <div class="alert alert-success">
+    ✅ Congratulations! You've qualified for the MCQ round.
+  </div>
+  {% else %}
+  <div class="alert alert-danger">
+    ❌ Your score is below 46%. Please improve and try again.
+  </div>
+  {% endif %}
+</body>
+<a href="/mcq" target="_blank">Go to Aptitude Round</a>
+
+
+
+
+</html>

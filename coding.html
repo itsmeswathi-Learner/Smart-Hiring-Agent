@@ -1,0 +1,772 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Coding Test Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CodeMirror for code editor -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/material-darker.min.css">
+
+
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+      padding: 32px 40px 40px 40px;
+      position: relative;
+    }
+
+    .guidelines {
+      margin-bottom: 32px;
+    }
+
+    .start-btn {
+      background: #0078d4;
+      color: #fff;
+      border: none;
+      padding: 14px 36px;
+      border-radius: 6px;
+      font-size: 1.2em;
+      cursor: pointer;
+      margin-top: 24px;
+    }
+
+    .test-header {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 32px;
+      margin-bottom: 24px;
+    }
+
+    .timer {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #e53935;
+      background: #fff3e0;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid #ffd180;
+    }
+
+    .webcam {
+      width: 80px;
+      height: 60px;
+      border-radius: 8px;
+      background: #222;
+      overflow: hidden;
+      border: 2px solid #0078d4;
+    }
+
+    .question-section {
+      margin-bottom: 24px;
+    }
+
+    .question-title {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .question-description {
+      background: #f9f9f9;
+      padding: 18px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .io-section {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 16px;
+    }
+
+    .io-block {
+      background: #f1f1f1;
+      padding: 12px;
+      border-radius: 8px;
+      flex: 1;
+    }
+
+    .editor-section {
+      margin-bottom: 18px;
+    }
+
+    .lang-select {
+      margin-bottom: 10px;
+      font-size: 1em;
+      padding: 6px 12px;
+      border-radius: 5px;
+    }
+
+    .editor-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 16px;
+    }
+
+    .run-btn,
+    .submit-btn {
+      background: #0078d4;
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      background: #43a047;
+    }
+
+    .output-section {
+      background: #f1f8e9;
+      padding: 12px;
+      border-radius: 8px;
+      min-height: 40px;
+      margin-top: 10px;
+      font-family: monospace;
+    }
+
+    .feedback-section {
+      margin-top: 32px;
+      text-align: center;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      font-size: 2em;
+      margin-bottom: 12px;
+    }
+
+    .star {
+      cursor: pointer;
+      color: #bbb;
+      transition: color 0.2s;
+    }
+
+    .star.selected {
+      color: #f2cc0f;
+    }
+
+    .feedback-text {
+      width: 60%;
+      min-height: 60px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      padding: 8px;
+      margin-bottom: 14px;
+      font-size: 1em;
+    }
+
+    .submit-feedback-btn {
+      background: #0078d4;
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    .thank-you {
+      text-align: center;
+      font-size: 1.3em;
+      margin-top: 40px;
+    }
+
+    #editor-container {
+      height: 320px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        padding: 12px;
+      }
+
+      .io-section {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .feedback-text {
+        width: 98%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" id="main-container">
+    <!-- Guidelines and Start Button -->
+    <div class="guidelines" id="guidelines-section">
+      <h2>Welcome to the Coding Test</h2>
+      <ul>
+        <li>Read each question carefully before starting.</li>
+        <li>You will be given <b>2 coding questions</b>, each with a time limit.</li>
+        <li>Choose your preferred programming language for each question.</li>
+        <li>Do not switch tabs, minimize, maximize, or close the window during the test.</li>
+        <li>Once you move to the next question, you cannot go back.</li>
+        <li>When time is up, your answer will be submitted automatically.</li>
+      </ul>
+      <button class="start-btn" id="start-btn">Start Test</button>
+    </div>
+    <!-- Coding Test Section (hidden initially) -->
+    <div id="test-section" style="display:none;">
+      <div class="test-header">
+        <div class="timer" id="timer">00:00</div>
+        <div class="webcam"><video id="webcam-video" autoplay muted width="80" height="60"></video></div>
+      </div>
+      <div class="question-section">
+        <div class="question-title" id="question-title"></div>
+        <div class="question-description" id="question-description"></div>
+        <div class="io-section">
+          <div class="io-block">
+            <b>Input:</b>
+            <pre id="question-input"></pre>
+          </div>
+          <div class="io-block">
+            <b>Output:</b>
+            <pre id="question-output"></pre>
+          </div>
+        </div>
+      </div>
+      <div class="editor-section">
+        <select class="lang-select" id="language-select">
+          <option value="python">Python</option>
+          <option value="cpp">C++</option>
+          <option value="c">C</option>
+          <option value="java">Java</option>
+          <option value="javascript">JavaScript</option>
+          <option value="csharp">C#</option>
+          <option value="ruby">Ruby</option>
+          <option value="go">Go</option>
+        </select>
+        <div id="editor-container"></div>
+        <div class="editor-actions">
+          <button class="run-btn" id="run-btn">Run</button>
+          <button class="submit-btn" id="submit-btn">Submit</button>
+        </div>
+        <div class="output-section" id="output-section"></div>
+      </div>
+    </div>
+    <!-- Thank You and Feedback Section (hidden initially) -->
+    <div id="thankyou-section" style="display:none;">
+      <div class="thank-you" id="thankyou-message"></div>
+      <div class="feedback-section">
+        <h3>Rate your experience</h3>
+        <div class="stars" id="star-rating">
+          <span class="star" data-value="1">&#9733;</span>
+          <span class="star" data-value="2">&#9733;</span>
+          <span class="star" data-value="3">&#9733;</span>
+          <span class="star" data-value="4">&#9733;</span>
+          <span class="star" data-value="5">&#9733;</span>
+        </div>
+        <textarea class="feedback-text" id="feedback-text"
+          placeholder="Share your feedback about the UI and coding experience..."></textarea><br>
+        <button class="submit-feedback-btn" id="submit-feedback-btn">Submit Feedback</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CodeMirror and JS dependencies -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/ruby/ruby.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/go/go.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/display/autorefresh.min.js"></script>
+  <script>
+    /* ------------------ Platform State Variables ------------------ */
+    let questions = []; // Will hold fetched questions
+    let currentQuestion = 0;
+    let timerInterval = null;
+    let timePerQuestion = 1200; // 10 minutes per question (in seconds)
+    let timeLeft = timePerQuestion;
+    let editor = null;
+    let webcamStream = null;
+    let recordingChunks = [];
+    let mediaRecorder = null;
+    let testClosed = false;
+    let closeReason = "";
+
+    /* ------------------ Utility Functions ------------------ */
+    // Format seconds as MM:SS
+    function formatTime(sec) {
+      let m = Math.floor(sec / 60).toString().padStart(2, '0');
+      let s = (sec % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    // Prevent tab switch, minimize, maximize, close, shortcuts
+    function preventCheating() {
+      // Tab switch
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && !testClosed) {
+          closeTest("Tab switch detected");
+        }
+      });
+      // Window blur (minimize, alt+tab, etc)
+      window.addEventListener('blur', () => {
+        if (!testClosed) closeTest("Window lost focus (minimize or alt+tab)");
+      });
+      // F5, Ctrl+R, Ctrl+W, Ctrl+Tab, Alt+Tab, etc
+      window.addEventListener('keydown', (e) => {
+        if (
+          e.key === "F5" || e.key === "F11" ||
+          (e.ctrlKey && (e.key === "r" || e.key === "R" || e.key === "w" || e.key === "W" || e.key === "Tab")) ||
+          (e.altKey && e.key === "Tab")
+        ) {
+          e.preventDefault();
+          if (!testClosed) closeTest("Shortcut or refresh detected");
+        }
+      });
+      // Prevent right click
+      window.addEventListener('contextmenu', e => e.preventDefault());
+      // Prevent copy/paste
+      document.addEventListener('copy', e => e.preventDefault());
+      document.addEventListener('paste', e => e.preventDefault());
+      // Prevent drag/drop
+      document.addEventListener('dragstart', e => e.preventDefault());
+      // Prevent window close
+      window.onbeforeunload = function () {
+        if (!testClosed) {
+          closeTest("Window closed or reloaded");
+          return "Are you sure you want to leave?";
+        }
+      };
+    }
+
+    /* ------------------ Webcam Recording ------------------ */
+    async function startWebcamRecording() {
+      try {
+        webcamStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+        document.getElementById('webcam-video').srcObject = webcamStream;
+        // Start recording
+        mediaRecorder = new MediaRecorder(webcamStream, { mimeType: 'video/webm' });
+        recordingChunks = [];
+        mediaRecorder.ondataavailable = e => recordingChunks.push(e.data);
+        mediaRecorder.start();
+      } catch (err) {
+        closeTest("Webcam access denied or not available");
+      }
+    }
+
+    async function stopWebcamRecording() {
+      if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        mediaRecorder.stop(); // Triggers ondataavailable one last time
+      }
+      if (webcamStream) {
+        webcamStream.getTracks().forEach(track => track.stop());
+      }
+
+      // Wait until onstop is called and all data is available
+      if (mediaRecorder) {
+        await new Promise(resolve => mediaRecorder.onstop = resolve);
+
+        const superBuffer = new Blob(recordingChunks, { type: 'video/webm' });
+
+        // Optional: Validate blob size (should be > 0)
+        if (superBuffer.size === 0) {
+          console.error("Empty video blob!");
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('webcam_video', superBuffer, 'recording.webm');
+        formData.append('username', 'test_user');
+
+        try {
+          const response = await fetch('/api/save-webcam-recording', {
+            method: 'POST',
+            body: formData
+          });
+          const result = await response.json();
+          console.log("Recording saved:", result);
+        } catch (error) {
+          console.error("Error uploading recording:", error);
+        }
+      }
+    }
+
+    /* ------------------ Timer Functions ------------------ */
+    function startTimer() {
+      timeLeft = timePerQuestion;
+      document.getElementById('timer').textContent = formatTime(timeLeft);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').textContent = formatTime(timeLeft);
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          autoSubmit("Time up");
+        }
+      }, 1000);
+    }
+    function stopTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+    }
+
+    /* ------------------ Fetch Coding Questions ------------------ */
+    // Using LeetCode's unofficial API via RapidAPI (or fallback to sample questions)
+    async function fetchQuestions() {
+      // Example: Using https://api.api-ninjas.com/v1/codingchallenges?difficulty=hard
+      // You can replace this with any other free API or your own backend
+      try {
+        let resp = await fetch('https://api.api-ninjas.com/v1/codingchallenges?difficulty=hard', {
+          headers: { 'X-Api-Key': '/xXjl05+vniXYidTOs5GtQ==C66ZkgRP6cNc7PGJ' } // Replace with your free API key
+        });
+        if (!resp.ok) throw new Error("API error");
+        let data = await resp.json();
+        // Map to our format
+        questions = data.slice(0, 2).map(q => ({
+          title: q.title,
+          description: q.question,
+          input: q.input_format || "See description",
+          output: q.output_format || "See description",
+          testcases: q.sample_testcases || []
+        }));
+      } catch (e) {
+        // Fallback to hardcoded questions if API fails
+        questions = [
+          {
+            title: "Longest Substring Without Repeating Characters",
+            description: "Given a string s, find the length of the longest substring without repeating characters.",
+            input: "s = 'abcabcbb'",
+            output: "3",
+            testcases: [
+              { input: "abcabcbb", output: "3" },
+              { input: "bbbbb", output: "1" },
+              { input: "pwwkew", output: "3" }
+            ]
+          },
+          {
+            title: "Median of Two Sorted Arrays",
+            description: "Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.",
+            input: "nums1 = [1,3], nums2 = [2]",
+            output: "2.0",
+            testcases: [
+              { input: "[1,3],[2]", output: "2.0" },
+              { input: "[1,2],[3,4]", output: "2.5" }
+            ]
+          }
+        ];
+      }
+    }
+
+    /* ------------------ Code Editor Setup ------------------ */
+
+    function getDefaultCode(lang) {
+      switch (lang) {
+        case "python":
+          return "# Write your solution here\n\ndef Main():\n    pass";
+        case "cpp":
+          return "// C++ template\n#include <bits/stdc++.h>\nusing namespace std;\n\nint Main() {\n    // Your code here\n    return 0;\n}";
+        case "c":
+          return "// C template\n#include <stdio.h>\n\nint Main() {\n    // Your code here\n    return 0;\n}";
+        case "java":
+          return "public class Solution {\n    public static void main(String[] args) {\n        // Your code here\n    }\n}";
+        case "javascript":
+          return "// JavaScript template\nfunction Main() {\n    // Your code here\n}\n\nconsole.log(solution());";
+        case "csharp":
+          return "using System;\n\nclass Solution {\n    static void Main() {\n        // Your code here\n    }\n}";
+        case "ruby":
+          return "# Ruby template\ndef solution\n    # Your code here\nend\n\nputs solution";
+        case "go":
+          return "package main\n\nimport \"fmt\"\n\nfunc Main() {\n    // Your code here\n}";
+        default:
+          return "";
+      }
+    }
+
+    function getCodeMirrorMode(lang) {
+      switch (lang) {
+        case "python": return "python";
+        case "cpp": return "text/x-c++src";
+        case "c": return "text/x-csrc";
+        case "java": return "text/x-java";
+        case "javascript": return "javascript";
+        case "csharp": return "text/x-csharp";
+        case "ruby": return "ruby";
+        case "go": return "go";
+        default: return "text/plain";
+      }
+    }
+
+    function initializeEditor(lang) {
+      const mode = getCodeMirrorMode(lang);
+      const defaultCode = getDefaultCode(lang);
+
+      // Clear the editor container
+      const editorContainer = document.getElementById('editor-container');
+      editorContainer.innerHTML = '';
+
+      // Create new CodeMirror instance
+      editor = CodeMirror(editorContainer, {
+        value: defaultCode,
+        mode: mode,
+        theme: "material-darker",
+        lineNumbers: true,
+        autoCloseBrackets: true,
+        matchBrackets: true,
+        tabSize: 4,
+        indentUnit: 4,
+        autofocus: true,
+        lineWrapping: true,
+        extraKeys: { "Tab": false } // Disable tab key for indentation
+      });
+
+      // Force refresh after a short delay to ensure proper rendering
+      setTimeout(() => {
+        editor.refresh();
+      }, 100);
+    }
+
+    function switchLanguage(lang) {
+      if (editor) {
+        const mode = getCodeMirrorMode(lang);
+        const defaultCode = getDefaultCode(lang);
+
+        // Update the editor mode and content
+        editor.setOption("mode", mode);
+        editor.setValue(defaultCode);
+
+        // Force refresh to apply changes
+        editor.refresh();
+      }
+    }
+
+    /* ------------------ Display Question ------------------ */
+    function displayQuestion(idx) {
+      let q = questions[idx];
+      document.getElementById('question-title').textContent = `Q${idx + 1}: ${q.title}`;
+      document.getElementById('question-description').textContent = q.description;
+      document.getElementById('question-input').textContent = q.input;
+      document.getElementById('question-output').textContent = q.output;
+      document.getElementById('output-section').textContent = "";
+      document.getElementById('submit-btn').disabled = true;
+
+      // Initialize or switch editor language
+      const currentLang = document.getElementById('language-select').value;
+      if (editor) {
+        switchLanguage(currentLang);
+      } else {
+        initializeEditor(currentLang);
+      }
+    }
+
+    /* ------------------ Run Code (via Judge0 API) ------------------ */
+    async function runCode() {
+      let lang = document.getElementById('language-select').value;
+      let code = editor.getValue();
+      let q = questions[currentQuestion];
+      let testcases = q.testcases || [];
+
+      let outputSection = document.getElementById('output-section');
+      outputSection.textContent = "Running testcases...";
+
+      let results = [];
+
+      // Always enable submit button after running
+      document.getElementById('submit-btn').disabled = false;
+
+      for (let tc of testcases) {
+        let input = tc.input;
+        let expected = tc.output;
+
+        let result = await executeCode(lang, code, input);
+        let passed = result.trim() === expected.trim();
+
+        results.push({ input, expected, output: result, passed });
+      }
+
+      // Display Results (optional)
+      outputSection.innerHTML = results.map(r => `
+        <b>Input:</b><pre>${r.input}</pre>
+        <b>Expected:</b><pre>${r.expected}</pre>
+        <b>Your Output:</b><pre>${r.output}</pre>
+        <b>Status:</b> <span style="color:${r.passed ? 'green' : 'red'}">${r.passed ? '✅ Passed' : '❌ Failed'}</span>
+        <hr>
+    `).join('');
+    }
+
+    /* ------------------ Execute Code using Judge0 API ------------------ */
+    async function executeCode(lang, code, input) {
+      const langMap = {
+        python: 71, cpp: 54, c: 50, java: 62, javascript: 63,
+        csharp: 51, ruby: 72, go: 60
+      };
+      let language_id = langMap[lang];
+
+      try {
+        let resp = await fetch("https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=true", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-RapidAPI-Key": "7c1b688dc7msh2dbee41f383ed5cp196d08jsn4d51fd56f7c9",
+            "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
+          },
+          body: JSON.stringify({
+            source_code: code,
+            language_id: language_id,
+            stdin: input
+          })
+        });
+
+        if (!resp.ok) {
+          throw new Error(`HTTP error! status: ${resp.status}`);
+        }
+
+        let data = await resp.json();
+
+        console.log("Judge0 Response:", data); // Debugging line
+
+        if (data.stderr) return `Runtime Error:\n${data.stderr}`;
+        if (data.compile_output) return `Compile Error:\n${data.compile_output}`;
+        if (!data.stdout) return `(No output received from Judge0)`;
+
+        return data.stdout;
+
+      } catch (error) {
+        console.error("Error executing code:", error);
+        return `Error: ${error.message}`;
+      }
+    }
+
+    /* ------------------ Submit and Move to Next Question ------------------ */
+    function submitAnswer() {
+      stopTimer();
+      if (currentQuestion === questions.length - 1) {
+        finishTest();
+      } else {
+        currentQuestion++;
+        displayQuestion(currentQuestion);
+        startTimer();
+        document.getElementById('submit-btn').disabled = true;
+      }
+    }
+    function autoSubmit(reason) {
+      stopTimer();
+      if (currentQuestion === questions.length - 1) {
+        finishTest(reason);
+      } else {
+        currentQuestion++;
+        displayQuestion(currentQuestion);
+        startTimer();
+        document.getElementById('submit-btn').disabled = true;
+      }
+    }
+
+    /* ------------------ Finish Test and Show Feedback ------------------ */
+    function finishTest(reason = "Test completed") {
+      testClosed = true;
+      stopTimer();
+      stopWebcamRecording();
+      document.getElementById('test-section').style.display = "none";
+      document.getElementById('thankyou-section').style.display = "block";
+      document.getElementById('thankyou-message').innerHTML =
+        `<b>Thank you for taking the test!</b><br>${reason ? "Reason: " + reason : ""}`;
+    }
+
+    /* ------------------ Close Test on Cheating ------------------ */
+    function closeTest(reason) {
+      testClosed = true;
+      stopTimer();
+      stopWebcamRecording();
+      document.getElementById('test-section').style.display = "none";
+      document.getElementById('guidelines-section').style.display = "none";
+      document.getElementById('thankyou-section').style.display = "block";
+      document.getElementById('thankyou-message').innerHTML =
+        `<b>Your test has been closed.</b><br>Reason: ${reason}`;
+    }
+
+    /* ------------------ Feedback Submission ------------------ */
+    function setupFeedback() {
+      let stars = document.querySelectorAll('.star');
+      let selectedRating = 0;
+
+      stars.forEach(star => {
+        star.addEventListener('click', function () {
+          selectedRating = parseInt(this.getAttribute('data-value'));
+          stars.forEach((s, i) => {
+            s.classList.toggle('selected', i < selectedRating);
+          });
+        });
+      });
+
+      document.getElementById('submit-feedback-btn').onclick = function () {
+        let feedback = document.getElementById('feedback-text').value;
+
+        if (!selectedRating || !feedback.trim()) {
+          alert("Please select a rating and write some feedback.");
+          return;
+        }
+
+        console.log("Sending feedback:", {
+          rating: selectedRating,
+          feedback: feedback
+        }); // 🔍 Debugging line
+
+        fetch('/api/submit-feedback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            rating: selectedRating,
+            feedback: feedback
+          })
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log("Feedback result:", data);
+            document.querySelector('.feedback-section').innerHTML = "<b>Thank you for your feedback!</b>";
+          })
+          .catch(err => {
+            console.error("Error submitting feedback:", err); // 🛠 Log any errors
+            alert("Failed to submit feedback. Please check console.");
+          });
+      };
+    }
+
+    /* ------------------ Main Event Listeners ------------------ */
+    document.getElementById('start-btn').onclick = async function () {
+      document.getElementById('guidelines-section').style.display = "none";
+      document.getElementById('test-section').style.display = "block";
+      await fetchQuestions();
+      displayQuestion(0);
+      startTimer();
+      startWebcamRecording();
+      preventCheating();
+    };
+
+    document.getElementById('run-btn').onclick = runCode;
+    document.getElementById('submit-btn').onclick = submitAnswer;
+
+    document.getElementById('language-select').onchange = function () {
+      switchLanguage(this.value);
+    };
+
+    setupFeedback();
+
+  </script>
+</body>
+
+</html>

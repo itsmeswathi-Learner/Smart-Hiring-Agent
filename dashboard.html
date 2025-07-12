@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dashboard - Smart Hiring Agent</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="dashboard-bg">
+    <div class="welcome-box">
+        <h1>Welcome, {{ username }} 👋</h1>
+        <p>Ready to start your hiring journey?</p>
+        <a href="/logout">Logout</a>
+        <br>
+        <a href="/upload_resume"><button>start</button></a>
+    </div>
+</body>
+
+</html>
