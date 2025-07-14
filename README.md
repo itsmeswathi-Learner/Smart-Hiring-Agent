@@ -3,13 +3,13 @@
 An intelligent hiring platform that automates candidate evaluation through multiple stages:
 
 * 📄 Resume Scoring (ATS)
-* 🧠 Chatbot-based Interview Round with Speech-to-Text
+* 🧠 Interview Round with Speech-to-Text
 * 🧮 MCQ Test (Aptitude + Verbal + Logical Reasoning)
 * 👨‍💻 Coding Round with Proctoring and Video Monitoring
 
 Helps recruiters streamline hiring and empowers students to experience realistic assessments.
 
----
+
 
 ## 🚀 Features
 
@@ -39,14 +39,13 @@ Helps recruiters streamline hiring and empowers students to experience realistic
 
   * 60-second timer per question
   * Auto-next after time ends
-  * Instant AI evaluation
-  * Cheating prevention (see Proctoring)
+  * Cheating prevention
 
 ### 👨‍💻 Coding Round
 
 * Online code editor with syntax highlighting
 * Secure code execution using Judge0 API
-* Real-time **video recording and audio monitoring** for proctoring
+* Real-time **video recording** for proctoring
 * Submit code for backend logic testing
 * Evaluated on correctness, efficiency, and edge cases
 * Timer-based enforcement and auto-submit upon timeout
@@ -61,11 +60,6 @@ Helps recruiters streamline hiring and empowers students to experience realistic
   * MCQ answers & scores
   * Coding submissions & outcomes
 
-### 📊 Final Dashboard
-
-* View scores from all rounds in one place
-* Downloadable result report (PDF - Coming soon!)
-
 ### 🛡️ Proctoring Features
 
 * Prevents cheating via:
@@ -76,7 +70,6 @@ Helps recruiters streamline hiring and empowers students to experience realistic
   * Shows warning on violation
   * Auto-disqualify after repeated alerts
   * **Video recording of candidate during the coding round using JavaScript MediaRecorder API**
-  * **Audio stream capture and face-position monitoring (experimental)**
   * **Speech-to-text for interview via Web Speech API**
 
 ---
@@ -86,8 +79,9 @@ Helps recruiters streamline hiring and empowers students to experience realistic
 **Frontend**: HTML5, CSS3, Vanilla JavaScript
 **Backend**: Flask (Python)
 **Database**: MySQL
-**AI Logic**: Chatbot interview evaluator, Resume keyword matcher, MCQ scorer
+**AI Logic**: Interview evaluator (rule based AI) , Resume keyword matcher.
 **Proctoring**: JS event listeners, camera and microphone stream APIs
+
 **APIs & Libraries**:
 
 * 🧪 **Judge0 RapidAPI**: Used for secure and efficient online code execution during the coding round
@@ -155,31 +149,30 @@ http://127.0.0.1:5000
 
 * Route: `/upload_resume`
 * Upload resume
-* Paste job description
+* Enter job description
 * View ATS score
 
 ### 2. Interview Round
 
 * Route: `/interview`
-* Chatbot asks questions
+* Shows questions
 * Speech input via microphone
-* Scores grammar + relevance + confidence
+* Scores grammar + relevance + confidence+ answer type
 
 ### 3. MCQ Test
 
 * Route: `/mcq`
 * 30 timed questions
 * Sections: Aptitude, Verbal, Logical
-* AI scoring: +1 correct, -0.1 wrong
 
 ### 4. Coding Round
 
 * Route: `/coding`
 * Code in-browser with test cases
-* Timer starts with video/audio recording enabled
+* Timer starts with video recording enabled
 * Auto-submit after timeout or tab switch violations
 * Code submitted to backend for Judge0 evaluation
-* Results shown immediately or stored in dashboard
+* Results are stored in dashboard
 
 ---
 
@@ -193,7 +186,7 @@ http://127.0.0.1:5000
 | `mcqanswers`       | All submitted MCQ answers                         |
 | `mcqresults`       | Final MCQ scores                                  |
 | `codingresults`    | Stores coding submissions                         |
-| `videologs`        | Stores base64 or path of recorded webcam sessions |
+| `webcams`        | Stores  path of recorded webcam sessions |
 
 ---
 
@@ -204,8 +197,7 @@ http://127.0.0.1:5000
 * 📏 Prevents resizing/minimizing
 * ⚠️ Shows warning alert
 * 🚫 Auto-terminate after repeated violations
-* 🎥 **Live video recording** using browser camera
-* 🎤 **Audio stream monitoring** with browser permission
+* 🎥 **Live video recording** using browser camera(JavaScript MediaRecorder API)
 * 🗣️ **Speech-to-text input** using Web Speech API
 * ⏲️ **Timer lock** with forced auto-submit
 
@@ -252,10 +244,9 @@ git push origin feature/my-feature
 
 ### Ideas for Improvement:
 
-* Better MCQ questions (topic-wise)
-* PDF report generation
-* AI-enhanced interview logic
-* Webcam/face detection proctoring
+* Better MCQ questions
+* AI-enhanced Interview (Rule based)
+* Webcam detection proctoring
 * Admin dashboard
 * Dockerfile for containerization
 * Cloud deployment guide (Render, PythonAnywhere, Heroku)
