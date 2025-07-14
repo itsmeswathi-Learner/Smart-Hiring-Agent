@@ -16,12 +16,12 @@ This project helps automate the hiring process by evaluating candidates through 
      Analyze resumes for keywords, formatting, readability
 🤖 Interview
 
-      Chatbot-based interview simulation
+     Chatbot-based interview simulation
 🧮 MCQ Test
 
     30 questions: 10 Aptitude, 10 Verbal, 10 Logical Reasoning
-    ⏱️ 1-Minute Timer
-     Auto-next after time ends
+    1-Minute Timer
+    Auto-next after time ends
 🧑‍💻 Coding Round
 
      Submit code for backend analysis
@@ -39,23 +39,17 @@ This project helps automate the hiring process by evaluating candidates through 
 🧰 Technologies Used
 
 Frontend          
-
             -HTML5, CSS3, Vanilla JavaScript
 
 Backend    
-
               -Flask (Python)
 Database           
-
               -MySQL
 AI Features       
-
               -chatbot simulation
 Proctoring        
-
               -JavaScript event listeners
 Deployment        
-
               -Local Flask server
 
 
@@ -91,23 +85,19 @@ Ensure you have a working MySQL setup. Import the schema using:
 🧪 How to Use
 
 1. Resume Upload
-   
        Go to /upload_resume
        Upload .pdf or .docx resume
        Enter job description
        View ATS score and matched keywords
 2. Interview Simulation
-   
        Go to /interview
        Get score based on answer type and grammar  
 3. MCQ Test
- 
        Go to /mcq
        Complete 30 questions (10 per section)
        Timer per question (60 seconds)
        Proctoring prevents cheating
 4. Coding Round
-   
        Go to /coding
        Write code in editor
        Submit for backend analysis
@@ -154,18 +144,22 @@ If you want to contribute:
 
 Fork the repo
 Create a new branch:
-git checkout -b feature/new-interview-round
+
+    git checkout -b feature/new-interview-round
 Commit changes:
-git commit -m 'Add new feature'
+
+    git commit -m 'Add new feature'
 Push to your branch:
-git push origin feature/new-interview-round
+
+    git push origin feature/new-interview-round
 Open a Pull Request
 
 📬 Contact
 
-swathilakshmigurram17@gmail.com
+     swathilakshmigurram17@gmail.com
 Project Link:
-👉 https://github.com/itsmeswathi-Learner/smart-hiring-agent
+
+    👉 https://github.com/itsmeswathi-Learner/smart-hiring-agent
 
 
 
@@ -187,4 +181,5 @@ If you're using this in production or testing it, I'd love to hear from you!
 
 📬 How to Share Feedback
 📨 Email:
-swathilakshmigurram17@gmail.com
+
+     swathilakshmigurram17@gmail.com
