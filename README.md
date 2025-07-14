@@ -1,185 +1,239 @@
-🧠 Smart Hiring Agent
+# 🧠 Smart Hiring Agent
 
-A smart hiring agent platform with resume upload, Interview round, MCQ test (Aptitude + Verbal + Logical Reasoning), coding round with proctoring features. 
+An intelligent hiring platform that automates candidate evaluation through multiple stages:
 
-This project helps automate the hiring process by evaluating candidates through multiple stages: 
+* 📄 Resume Scoring (ATS)
+* 🧠 Chatbot-based Interview Round
+* 🧮 MCQ Test (Aptitude + Verbal + Logical Reasoning)
+* 👨‍💻 Coding Round with Proctoring
 
-     -->resume scoring
-     -->Interview round
-     -->Aptitude+verbal reasoning+logical reasoning(MCQ Test)
-     -->Coding round
+Helps recruiters streamline hiring and empowers students to experience realistic assessments.
 
-🚀 Features
+---
 
-📄 Resume Upload & ATS Scoring
+## 🚀 Features
 
-     Analyze resumes for keywords, formatting, readability
-🤖 Interview
+### 📄 Resume Upload & ATS Scoring
 
-     Chatbot-based interview simulation
-🧮 MCQ Test
+* Upload resumes in `.pdf` or `.docx` format
+* Analyze for:
 
-    30 questions: 10 Aptitude, 10 Verbal, 10 Logical Reasoning
-    1-Minute Timer
-    Auto-next after time ends
-🧑‍💻 Coding Round
+  * Keyword match against job description
+  * Formatting quality
+  * Section presence & readability
 
-     Submit code for backend analysis
-📥 MySQL
+### 🤖 Interview Simulation
 
-     Stores user data, answers, and results     
-📊 Final Dashboard
+* Chatbot conducts structured interview questions
+* Evaluates based on:
 
-     View scores from all rounds
-🛡️ Proctoring
+  * Answer quality (theory vs practical)
+  * Grammar & structure
+  * Confidence simulation
 
-     Prevents copy/paste, tab switch, window resizing
+### 🧮 MCQ Test (Aptitude, Verbal, Logical)
 
+* Total 30 Questions: 10 Aptitude, 10 Verbal, 10 Logical Reasoning
+* Features:
 
-🧰 Technologies Used
+  * 60-second timer per question
+  * Auto-next after time ends
+  * Instant AI evaluation
+  * Cheating prevention (see Proctoring)
 
-Frontend          
-            -HTML5, CSS3, Vanilla JavaScript
+### 👨‍💻 Coding Round
 
-Backend    
-              -Flask (Python)
-Database           
-              -MySQL
-AI Features       
-              -chatbot simulation
-Proctoring        
-              -JavaScript event listeners
-Deployment        
-              -Local Flask server
+* Online code editor
+* Submit code for backend logic testing
+* Evaluated on correctness, efficiency, and edge cases
 
+### 📥 MySQL Database Integration
 
-📦 Requirements
+* Stores:
 
-🔧 Python Packages
+  * User credentials
+  * Resume scores
+  * Interview results
+  * MCQ answers & scores
+  * Coding submissions & outcomes
+
+### 📊 Final Dashboard
+
+* View scores from all rounds in one place
+* Downloadable result report (PDF - Coming soon!)
+
+### 🛡️ Proctoring Features
+
+* Prevents cheating via:
+
+  * Disabling Ctrl+C, Ctrl+V, right-click
+  * Tab/window switch detection
+  * Window resizing or minimize detection
+  * Shows warning on violation
+  * Auto-disqualify after repeated alerts
+
+---
+
+## 🧰 Tech Stack
+
+**Frontend**: HTML5, CSS3, Vanilla JavaScript
+**Backend**: Flask (Python)
+**Database**: MySQL
+**AI Logic**: Chatbot interview evaluator, Resume keyword matcher, MCQ scorer
+**Proctoring**: JS event listeners
+
+---
+
+## 📦 Requirements
+
+### 🔧 Python Packages
 
 Install these before running:
 
-      pip install flask mysql-connector-python werkzeug textstat language_tool_python
-🖥️ MySQL
+```bash
+pip install flask mysql-connector-python werkzeug textstat language_tool_python
+```
 
-Ensure you have a working MySQL setup. Import the schema using:
+### 🖥️ MySQL Setup
 
-     mysql -u root -p < database.sql
+Ensure your MySQL server is running.
+Import schema:
 
-🧪 How to Run Locally
+```bash
+mysql -u root -p < database.sql
+```
 
-1.Clone the repo
+---
 
-     git clone https://github.com/your-username/smart-hiring-agent.git 
-     cd smart-hiring-agent
-2.Install dependencies
+## 🧪 How to Run Locally
 
-     pip install -r requirements.txt
-3.Start the Flask app
+1. **Clone the repo**
 
-    python app.py
-4.Open in browser
+```bash
+git clone https://github.com/itsmeswathi-Learner/Smart-Hiring-Agent.git
+cd Smart-Hiring-Agent
+```
 
-    http://127.0.0.1:5000
+2. **Install dependencies**
 
-🧪 How to Use
+```bash
+pip install -r requirements.txt
+```
 
-1. Resume Upload
-       Go to /upload_resume
-       Upload .pdf or .docx resume
-       Enter job description
-       View ATS score and matched keywords
-2. Interview Simulation
-       Go to /interview
-       Get score based on answer type and grammar  
-3. MCQ Test
-       Go to /mcq
-       Complete 30 questions (10 per section)
-       Timer per question (60 seconds)
-       Proctoring prevents cheating
-4. Coding Round
-       Go to /coding
-       Write code in editor
-       Submit for backend analysis
-**Chatbot
-      Jotform assistent
+3. **Start Flask App**
 
-📊 Database Tables
+```bash
+python app.py
+```
 
-users                   - Stores user login details
-resume_scores           - Stores resume ATS scores
-mcqanswers              - Stores each MCQ answer             
-mcqresults              - Stores final MCQ score and AI evaluation
-codingresults           - Stores coding submissions
-interviewresults        - Stores interview questions and user answers
+4. **Visit in Browser**
 
+```
+http://127.0.0.1:5000
+```
 
-🧪 Proctoring Features
+---
 
-❌ Blocks keyboard shortcuts (Ctrl+C, Ctrl+V, etc.)
+## 🧪 User Guide
 
-❌ Blocks right-click
+### 1. Resume Scoring
 
-❌ Detects tab/window switch
+* Route: `/upload_resume`
+* Upload resume
+* Paste job description
+* View ATS score
 
-❌ Prevents window resizing/minimizing
+### 2. Interview Round
 
-⚠️ Shows alert on violation
+* Route: `/interview`
+* Chatbot asks questions
+* Scores grammar + relevance + confidence
 
-🚫 Closes test if repeated violations
+### 3. MCQ Test
 
+* Route: `/mcq`
+* 30 timed questions
+* Sections: Aptitude, Verbal, Logical
+* AI scoring: +1 correct, -0.1 wrong
 
+### 4. Coding Round
 
-🧠 AI Scoring Logic
-✅ MCQ: +1 for correct, -0.1 for incorrect
+* Route: `/coding`
+* Code in-browser
+* Submit & get results
 
-✅ Resume: Keyword match, section presence, formatting
+---
 
-✅ Interview: Practical vs theoretical answers, grammar, confidence
+## 🗃️ Database Schema Overview
 
+| Table Name         | Purpose                      |
+| ------------------ | ---------------------------- |
+| `users`            | Stores login credentials     |
+| `resume_scores`    | ATS resume evaluations       |
+| `interviewresults` | Chatbot-based interview logs |
+| `mcqanswers`       | All submitted MCQ answers    |
+| `mcqresults`       | Final MCQ scores             |
+| `codingresults`    | Stores coding submissions    |
 
+---
 
-🧾 Contributing
-If you want to contribute:
+## 🔐 Proctoring (Cheating Prevention)
 
-Fork the repo
-Create a new branch:
+* ❌ Blocks Ctrl+C, Ctrl+V, right-click
+* 🛑 Detects tab/window change
+* 📏 Prevents resizing/minimizing
+* ⚠️ Shows warning alert
+* 🚫 Auto-terminate after repeated violations
 
-    git checkout -b feature/new-interview-round
-Commit changes:
+---
 
-    git commit -m 'Add new feature'
-Push to your branch:
+## 🧠 AI Scoring Logic
 
-    git push origin feature/new-interview-round
-Open a Pull Request
+* **MCQ**: +1 for correct, -0.1 for incorrect
+* **Resume**: Section match + keyword presence + format score
+* **Interview**: Evaluates grammar + answer style + simulated confidence
 
-📬 Contact
+---
 
-     swathilakshmigurram17@gmail.com
-Project Link:
+## 🤝 Contributing
 
-    👉 https://github.com/itsmeswathi-Learner/smart-hiring-agent
+1. **Fork this repo**
+2. Create a feature branch:
 
+```bash
+git checkout -b feature/my-feature
+```
 
+3. Commit your changes:
 
-🤝 Suggestions & Feedback
-I'm actively looking for ways to improve this Smart Hiring Agent platform. If you have any suggestions , feedback , or want to contribute , please do share!
+```bash
+git commit -m "Add XYZ feature"
+```
 
-You can help by suggesting:
+4. Push to GitHub:
 
-Better MCQ questions (topic-wise)
-Improved ATS resume scoring logic
-AI-based interview evaluation
-Webcam or face detection proctoring
-PDF report generation
-Admin panel for recruiters
-Deployment guides for Render, PythonAnywhere, Heroku
-Dockerfile and containerization
-Real-time dashboard or analytics
-If you're using this in production or testing it, I'd love to hear from you!
+```bash
+git push origin feature/my-feature
+```
 
-📬 How to Share Feedback
-📨 Email:
+5. Open a Pull Request 🚀
 
-     swathilakshmigurram17@gmail.com
+---
+
+## 📬 Feedback & Suggestions
+
+💌 Email: 
+[swathilakshmigurram17@gmail.com](mailto:swathilakshmigurram17@gmail.com)
+📌 Project Repo: [Smart Hiring Agent](https://github.com/itsmeswathi-Learner/Smart-Hiring-Agent)
+
+### Ideas for Improvement:
+
+* Better MCQ questions (topic-wise)
+* PDF report generation
+* AI-enhanced interview logic
+* Webcam/face detection proctoring
+* Admin dashboard
+* Dockerfile for containerization
+* Cloud deployment guide (Render, PythonAnywhere, Heroku)
+
+If you're using or testing this project, I’d love your feedback!
