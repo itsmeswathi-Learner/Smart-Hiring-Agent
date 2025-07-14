@@ -1,5 +1,7 @@
 🧠 Smart Hiring Agent
+
 A smart hiring agent platform with resume upload, Interview round, MCQ test (Aptitude + Verbal + Logical Reasoning), coding round with proctoring features. 
+
 This project helps automate the hiring process by evaluating candidates through multiple stages: 
 -->resume scoring
 -->Interview round
@@ -37,14 +39,18 @@ Deployment         -Local Flask server
 
 
 📦 Requirements
+
 🔧 Python Packages
+
 Install these before running:
 pip install flask mysql-connector-python werkzeug textstat language_tool_python
 🖥️ MySQL
+
 Ensure you have a working MySQL setup. Import the schema using:
 mysql -u root -p < database.sql
 
 🧪 How to Run Locally
+
 1.Clone the repo
 git clone https://github.com/your-username/smart-hiring-agent.git 
 cd smart-hiring-agent
@@ -56,6 +62,7 @@ python app.py
 http://127.0.0.1:5000
 
 🧪 How to Use
+
 1. Resume Upload
       Go to /upload_resume
       Upload .pdf or .docx resume
@@ -89,17 +96,26 @@ interviewresults        - Stores interview questions and user answers
 🧪 Proctoring Features
 
 ❌ Blocks keyboard shortcuts (Ctrl+C, Ctrl+V, etc.)
+
 ❌ Blocks right-click
+
 ❌ Detects tab/window switch
+
 ❌ Prevents window resizing/minimizing
+
 ⚠️ Shows alert on violation
+
 🚫 Closes test if repeated violations
+
 
 
 🧠 AI Scoring Logic
 ✅ MCQ: +1 for correct, -0.1 for incorrect
+
 ✅ Resume: Keyword match, section presence, formatting
+
 ✅ Interview: Practical vs theoretical answers, grammar, confidence
+
 
 
 🧾 Contributing
