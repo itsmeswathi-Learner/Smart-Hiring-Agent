@@ -3,39 +3,60 @@
 A smart hiring agent platform with resume upload, Interview round, MCQ test (Aptitude + Verbal + Logical Reasoning), coding round with proctoring features. 
 
 This project helps automate the hiring process by evaluating candidates through multiple stages: 
--->resume scoring
--->Interview round
--->Aptitude+verbal reasoning+logical reasoning(MCQ Test)
--->Coding round
+
+     -->resume scoring
+     -->Interview round
+     -->Aptitude+verbal reasoning+logical reasoning(MCQ Test)
+     -->Coding round
 
 🚀 Features
 
 📄 Resume Upload & ATS Scoring
+
      Analyze resumes for keywords, formatting, readability
 🤖 Interview
+
       Chatbot-based interview simulation
 🧮 MCQ Test
+
     30 questions: 10 Aptitude, 10 Verbal, 10 Logical Reasoning
     ⏱️ 1-Minute Timer
      Auto-next after time ends
 🧑‍💻 Coding Round
+
      Submit code for backend analysis
 📥 MySQL
+
      Stores user data, answers, and results     
 📊 Final Dashboard
+
      View scores from all rounds
 🛡️ Proctoring
+
      Prevents copy/paste, tab switch, window resizing
 
 
 🧰 Technologies Used
 
-Frontend           -HTML5, CSS3, Vanilla JavaScript
-Backend            -Flask (Python)
-Database           -MySQL
-AI Features        -chatbot simulation
-Proctoring         -JavaScript event listeners
-Deployment         -Local Flask server
+Frontend          
+
+            -HTML5, CSS3, Vanilla JavaScript
+
+Backend    
+
+              -Flask (Python)
+Database           
+
+              -MySQL
+AI Features       
+
+              -chatbot simulation
+Proctoring        
+
+              -JavaScript event listeners
+Deployment        
+
+              -Local Flask server
 
 
 📦 Requirements
@@ -43,43 +64,53 @@ Deployment         -Local Flask server
 🔧 Python Packages
 
 Install these before running:
-pip install flask mysql-connector-python werkzeug textstat language_tool_python
+
+      pip install flask mysql-connector-python werkzeug textstat language_tool_python
 🖥️ MySQL
 
 Ensure you have a working MySQL setup. Import the schema using:
-mysql -u root -p < database.sql
+
+     mysql -u root -p < database.sql
 
 🧪 How to Run Locally
 
 1.Clone the repo
-git clone https://github.com/your-username/smart-hiring-agent.git 
-cd smart-hiring-agent
+
+     git clone https://github.com/your-username/smart-hiring-agent.git 
+     cd smart-hiring-agent
 2.Install dependencies
-pip install -r requirements.txt
+
+     pip install -r requirements.txt
 3.Start the Flask app
-python app.py
+
+    python app.py
 4.Open in browser
-http://127.0.0.1:5000
+
+    http://127.0.0.1:5000
 
 🧪 How to Use
 
 1. Resume Upload
-      Go to /upload_resume
-      Upload .pdf or .docx resume
-      Enter job description
-      View ATS score and matched keywords
+   
+       Go to /upload_resume
+       Upload .pdf or .docx resume
+       Enter job description
+       View ATS score and matched keywords
 2. Interview Simulation
-      Go to /interview
-      Get score based on answer type and grammar  
+   
+       Go to /interview
+       Get score based on answer type and grammar  
 3. MCQ Test
-      Go to /mcq
-      Complete 30 questions (10 per section)
-      Timer per question (60 seconds)
-      Proctoring prevents cheating
+ 
+       Go to /mcq
+       Complete 30 questions (10 per section)
+       Timer per question (60 seconds)
+       Proctoring prevents cheating
 4. Coding Round
-      Go to /coding
-      Write code in editor
-      Submit for backend analysis
+   
+       Go to /coding
+       Write code in editor
+       Submit for backend analysis
 **Chatbot
       Jotform assistent
 
