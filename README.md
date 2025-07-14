@@ -93,6 +93,22 @@ Helps recruiters streamline hiring and empowers students to experience realistic
 
 ---
 
+
+
+<img width="1887" height="928" alt="image" src="https://github.com/user-attachments/assets/28301494-f87a-4e00-b9ba-864595b54b53" />
+<img width="520" height="666" alt="image" src="https://github.com/user-attachments/assets/767831c9-742c-4391-b728-30db9f803591" />
+<img width="1840" height="829" alt="image" src="https://github.com/user-attachments/assets/791eee2c-f145-4271-8131-7a8103bdb970" />
+<img width="1721" height="826" alt="image" src="https://github.com/user-attachments/assets/20abc9e3-876d-4f0e-a804-f5c237eeb553" />
+<img width="1890" height="275" alt="image" src="https://github.com/user-attachments/assets/065427ac-0469-4a32-a508-2d1df3d314fe" />
+<img width="825" height="709" alt="image" src="https://github.com/user-attachments/assets/41cefb0b-2aeb-4b59-8dae-d4780f2420ee" />
+<img width="639" height="482" alt="image" src="https://github.com/user-attachments/assets/41304502-6a3e-4bc5-bc91-2d6466b0998b" />
+<img width="723" height="834" alt="image" src="https://github.com/user-attachments/assets/5d3ee3ea-b93c-4734-bac2-35d9d28ee976" />
+<img width="1805" height="622" alt="image" src="https://github.com/user-attachments/assets/44807943-2cf3-476a-beab-268f588e4a1a" />
+<img width="1180" height="828" alt="image" src="https://github.com/user-attachments/assets/19fe2fdc-baf8-45e6-8dd9-41557f30f3c7" />
+<img width="1554" height="835" alt="image" src="https://github.com/user-attachments/assets/8ccb2df1-c623-4ad5-bcf4-12679a5d0cc2" />
+<img width="1205" height="459" alt="image" src="https://github.com/user-attachments/assets/d680adaa-263f-4d13-863c-769e39f7f912" />
+
+
 ## 📦 Requirements
 
 ### 🔧 Python Packages
