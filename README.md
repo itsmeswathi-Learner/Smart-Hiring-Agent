@@ -3,9 +3,9 @@
 An intelligent hiring platform that automates candidate evaluation through multiple stages:
 
 * 📄 Resume Scoring (ATS)
-* 🧠 Chatbot-based Interview Round
+* 🧠 Chatbot-based Interview Round with Speech-to-Text
 * 🧮 MCQ Test (Aptitude + Verbal + Logical Reasoning)
-* 👨‍💻 Coding Round with Proctoring
+* 👨‍💻 Coding Round with Proctoring and Video Monitoring
 
 Helps recruiters streamline hiring and empowers students to experience realistic assessments.
 
@@ -25,6 +25,7 @@ Helps recruiters streamline hiring and empowers students to experience realistic
 ### 🤖 Interview Simulation
 
 * Chatbot conducts structured interview questions
+* Includes **speech-to-text input** using browser microphone
 * Evaluates based on:
 
   * Answer quality (theory vs practical)
@@ -43,9 +44,12 @@ Helps recruiters streamline hiring and empowers students to experience realistic
 
 ### 👨‍💻 Coding Round
 
-* Online code editor
+* Online code editor with syntax highlighting
+* Secure code execution using Judge0 API
+* Real-time **video recording and audio monitoring** for proctoring
 * Submit code for backend logic testing
 * Evaluated on correctness, efficiency, and edge cases
+* Timer-based enforcement and auto-submit upon timeout
 
 ### 📥 MySQL Database Integration
 
@@ -71,6 +75,9 @@ Helps recruiters streamline hiring and empowers students to experience realistic
   * Window resizing or minimize detection
   * Shows warning on violation
   * Auto-disqualify after repeated alerts
+  * **Video recording of candidate during the coding round using JavaScript MediaRecorder API**
+  * **Audio stream capture and face-position monitoring (experimental)**
+  * **Speech-to-text for interview via Web Speech API**
 
 ---
 
@@ -80,7 +87,15 @@ Helps recruiters streamline hiring and empowers students to experience realistic
 **Backend**: Flask (Python)
 **Database**: MySQL
 **AI Logic**: Chatbot interview evaluator, Resume keyword matcher, MCQ scorer
-**Proctoring**: JS event listeners
+**Proctoring**: JS event listeners, camera and microphone stream APIs
+**APIs & Libraries**:
+
+* 🧪 **Judge0 RapidAPI**: Used for secure and efficient online code execution during the coding round
+* 📚 **Textstat, language\_tool\_python**: Used for grammar and readability analysis in interview evaluation
+* 🎥 **MediaRecorder API**: Records video during coding round for submission
+* 🎤 **getUserMedia() API**: Captures microphone input for real-time monitoring
+* 🗣️ **Web Speech API**: Converts spoken answers to text in the interview round
+* 🔐 **Other Flask-compatible libraries**: For session handling, file processing, and input sanitation
 
 ---
 
@@ -147,6 +162,7 @@ http://127.0.0.1:5000
 
 * Route: `/interview`
 * Chatbot asks questions
+* Speech input via microphone
 * Scores grammar + relevance + confidence
 
 ### 3. MCQ Test
@@ -159,21 +175,25 @@ http://127.0.0.1:5000
 ### 4. Coding Round
 
 * Route: `/coding`
-* Code in-browser
-* Submit & get results
+* Code in-browser with test cases
+* Timer starts with video/audio recording enabled
+* Auto-submit after timeout or tab switch violations
+* Code submitted to backend for Judge0 evaluation
+* Results shown immediately or stored in dashboard
 
 ---
 
 ## 🗃️ Database Schema Overview
 
-| Table Name         | Purpose                      |
-| ------------------ | ---------------------------- |
-| `users`            | Stores login credentials     |
-| `resume_scores`    | ATS resume evaluations       |
-| `interviewresults` | Chatbot-based interview logs |
-| `mcqanswers`       | All submitted MCQ answers    |
-| `mcqresults`       | Final MCQ scores             |
-| `codingresults`    | Stores coding submissions    |
+| Table Name         | Purpose                                           |
+| ------------------ | ------------------------------------------------- |
+| `users`            | Stores login credentials                          |
+| `resume_scores`    | ATS resume evaluations                            |
+| `interviewresults` | Chatbot-based interview logs                      |
+| `mcqanswers`       | All submitted MCQ answers                         |
+| `mcqresults`       | Final MCQ scores                                  |
+| `codingresults`    | Stores coding submissions                         |
+| `videologs`        | Stores base64 or path of recorded webcam sessions |
 
 ---
 
@@ -184,6 +204,10 @@ http://127.0.0.1:5000
 * 📏 Prevents resizing/minimizing
 * ⚠️ Shows warning alert
 * 🚫 Auto-terminate after repeated violations
+* 🎥 **Live video recording** using browser camera
+* 🎤 **Audio stream monitoring** with browser permission
+* 🗣️ **Speech-to-text input** using Web Speech API
+* ⏲️ **Timer lock** with forced auto-submit
 
 ---
 
@@ -192,6 +216,7 @@ http://127.0.0.1:5000
 * **MCQ**: +1 for correct, -0.1 for incorrect
 * **Resume**: Section match + keyword presence + format score
 * **Interview**: Evaluates grammar + answer style + simulated confidence
+* **Coding**: Test case success, complexity score, code quality
 
 ---
 
@@ -222,8 +247,7 @@ git push origin feature/my-feature
 
 ## 📬 Feedback & Suggestions
 
-💌 Email: 
-[swathilakshmigurram17@gmail.com](mailto:swathilakshmigurram17@gmail.com)
+💌 Email: [swathilakshmigurram17@gmail.com](mailto:swathilakshmigurram17@gmail.com)
 📌 Project Repo: [Smart Hiring Agent](https://github.com/itsmeswathi-Learner/Smart-Hiring-Agent)
 
 ### Ideas for Improvement:
