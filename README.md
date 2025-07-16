@@ -256,15 +256,7 @@ git push origin feature/my-feature
 ## 📬 Feedback & Suggestions
 
 💌 Email: [swathilakshmigurram17@gmail.com](mailto:swathilakshmigurram17@gmail.com)
+
 📌 Project Repo: [Smart Hiring Agent](https://github.com/itsmeswathi-Learner/Smart-Hiring-Agent)
-
-### Ideas for Improvement:
-
-* Better MCQ questions
-* AI-enhanced Interview (Rule based)
-* Webcam detection proctoring
-* Admin dashboard
-* Dockerfile for containerization
-* Cloud deployment guide (Render, PythonAnywhere, Heroku)
 
 If you're using or testing this project, I’d love your feedback!
